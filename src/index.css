@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply m-0 min-w-80 font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  button,
+  input,
+  select {
+    @apply font-[inherit];
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply border border-white/25 bg-white/15 shadow-[0_8px_32px_rgba(15,23,42,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.06] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)];
+  }
+
+  .glass-strong {
+    @apply border border-white/30 bg-white/20 shadow-[0_20px_60px_rgba(79,70,229,0.12)] backdrop-blur-3xl dark:border-white/15 dark:bg-white/10 dark:shadow-[0_20px_60px_rgba(0,0,0,0.45)];
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-medium text-slate-700 backdrop-blur-md transition-all duration-300 hover:bg-white/20 dark:text-slate-200;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-sm text-slate-800 outline-none backdrop-blur-md transition-all duration-200 placeholder:text-slate-400 focus:border-violet-400/60 focus:ring-4 focus:ring-violet-500/10 dark:text-white dark:placeholder:text-slate-500;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent;
+  }
+
+  .mesh-bg {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18), transparent 35%),
+      radial-gradient(circle at 85% 10%, rgba(59, 130, 246, 0.16), transparent 30%),
+      radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.12), transparent 35%),
+      linear-gradient(135deg, #f8fafc 0%, #eef2ff 45%, #f5f3ff 100%);
+  }
+
+  .dark .mesh-bg {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.22), transparent 35%),
+      radial-gradient(circle at 85% 10%, rgba(59, 130, 246, 0.18), transparent 30%),
+      radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.14), transparent 35%),
+      linear-gradient(135deg, #020617 0%, #0f172a 45%, #1e1b4b 100%);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 25%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.08) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
