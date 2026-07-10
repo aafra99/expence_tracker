@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom'
 import { FiX } from 'react-icons/fi'
 import { NAV_ITEMS } from '../data/navigation.js'
+import { useCurrency } from '../hooks/useCurrency.js'
 import { useTransactions } from '../hooks/useTransactions.js'
 import { APP_NAME } from '../utils/constants.js'
-import { formatCurrency } from '../utils/formatters.js'
 
 function SidebarContent({ onNavigate }) {
+  const { formatAmount } = useCurrency()
   const { budgetGoal, budgetUsedPercent, monthlyExpenses } = useTransactions()
 
   return (
@@ -45,7 +46,7 @@ function SidebarContent({ onNavigate }) {
         <div className="rounded-xl bg-gradient-to-br from-violet-500/10 to-indigo-500/10 p-4">
           <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Budget Goal</p>
           <p className="mt-1 text-lg font-bold text-violet-600 dark:text-violet-300">
-            {formatCurrency(budgetGoal)} / mo
+            {formatAmount(budgetGoal)} / mo
           </p>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/20">
             <div
@@ -56,7 +57,7 @@ function SidebarContent({ onNavigate }) {
             />
           </div>
           <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-            {budgetUsedPercent.toFixed(0)}% used · {formatCurrency(monthlyExpenses)} spent
+            {budgetUsedPercent.toFixed(0)}% used · {formatAmount(monthlyExpenses)} spent
           </p>
         </div>
       </div>

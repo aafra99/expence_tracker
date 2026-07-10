@@ -1,4 +1,5 @@
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../data/categories.js'
+import { formatCurrency } from './formatters.js'
 
 function getCategoryLabel(categoryId) {
   const category = [...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES].find(
@@ -7,14 +8,19 @@ function getCategoryLabel(categoryId) {
   return category?.label ?? categoryId
 }
 
-export function exportTransactionsToCsv(transactions, filename = 'expense-tracker-export.csv') {
-  const headers = ['Date', 'Type', 'Title', 'Category', 'Amount']
+export function exportTransactionsToCsv(
+  transactions,
+  currency = 'USD',
+  filename = 'expense-tracker-export.csv',
+) {
+  const headers = ['Date', 'Type', 'Title', 'Category', 'Amount', 'Currency']
   const rows = transactions.map((transaction) => [
     transaction.date,
     transaction.type,
     transaction.title,
     getCategoryLabel(transaction.category),
-    transaction.amount.toFixed(2),
+    formatCurrency(transaction.amount, currency),
+    currency,
   ])
 
   const csvContent = [headers, ...rows]

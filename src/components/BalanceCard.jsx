@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import { FiCreditCard, FiTrendingDown, FiTrendingUp } from 'react-icons/fi'
+import { useCurrency } from '../hooks/useCurrency.js'
 import GlassCard from './GlassCard.jsx'
-import { formatCurrency } from '../utils/formatters.js'
 
 export default function BalanceCard({ balance = 0, trend = 0, delay = 0 }) {
+  const { formatAmount } = useCurrency()
   const isPositive = trend >= 0
 
   return (
@@ -24,7 +25,7 @@ export default function BalanceCard({ balance = 0, trend = 0, delay = 0 }) {
             animate={{ opacity: 1, scale: 1 }}
             className="mt-3 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white"
           >
-            {formatCurrency(balance)}
+            {formatAmount(balance)}
           </motion.p>
           <p className={`mt-2 inline-flex items-center gap-1 text-xs font-semibold ${isPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
             {isPositive ? <FiTrendingUp className="h-3.5 w-3.5" /> : <FiTrendingDown className="h-3.5 w-3.5" />}

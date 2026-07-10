@@ -6,12 +6,14 @@ import GlassCard from '../components/GlassCard.jsx'
 import SearchBar from '../components/SearchBar.jsx'
 import TransactionList from '../components/TransactionList.jsx'
 import TypeFilter from '../components/TypeFilter.jsx'
+import { useCurrency } from '../hooks/useCurrency.js'
 import { useTransactions } from '../hooks/useTransactions.js'
 import { filterTransactions } from '../utils/analytics.js'
 import { exportTransactionsToCsv } from '../utils/exportCsv.js'
 
 export default function Reports() {
   const navigate = useNavigate()
+  const { currency } = useCurrency()
   const { transactions, deleteTransaction } = useTransactions()
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('all')
@@ -33,7 +35,7 @@ export default function Reports() {
   }
 
   function handleExport() {
-    exportTransactionsToCsv(filteredTransactions)
+    exportTransactionsToCsv(filteredTransactions, currency)
   }
 
   return (

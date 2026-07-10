@@ -10,6 +10,7 @@ import {
 } from 'chart.js'
 import { Bar, Doughnut } from 'react-chartjs-2'
 import GlassCard from '../components/GlassCard.jsx'
+import { useCurrency } from '../hooks/useCurrency.js'
 import { useTheme } from '../hooks/useTheme.js'
 import { useTransactions } from '../hooks/useTransactions.js'
 import {
@@ -20,11 +21,10 @@ import {
   getSavingsRate,
   getTopExpenseCategory,
 } from '../utils/analytics.js'
-import { formatCurrency } from '../utils/formatters.js'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
 
-function getChartOptions(isDark, includeScales = true) {
+function getChartOptions(isDark, formatAmount, includeScales = true) {
   const textColor = isDark ? '#94a3b8' : '#64748b'
   const gridColor = isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(100, 116, 139, 0.12)'
 
@@ -49,6 +49,13 @@ function getChartOptions(isDark, includeScales = true) {
         borderWidth: 1,
         padding: 12,
         cornerRadius: 12,
+        callbacks: {
+          label(context) {
+            const value = context.parsed.y ?? context.parsed ?? context.raw
+            const label = context.dataset.label ?? context.label ?? ''
+            return label ? `${label}: ${formatAmount(value)}` : formatAmount(value)
+          },
+        },
       },
     },
   }
@@ -74,6 +81,7 @@ function getChartOptions(isDark, includeScales = true) {
 export default function Analytics() {
   const { transactions } = useTransactions()
   const { theme } = useTheme()
+  const { formatAmount } = useCurrency()
   const isDark = theme === 'dark'
   const monthKey = getCurrentMonthKey()
   const monthLabel = new Date().toLocaleString(undefined, { month: 'long', year: 'numeric' })
@@ -140,7 +148,7 @@ export default function Analytics() {
               <Doughnut
                 data={pieData}
                 options={{
-                  ...getChartOptions(isDark, false),
+                  ...getChartOptions(isDark, formatAmount, false),
                   cutout: '65%',
                 }}
               />
@@ -160,14 +168,14 @@ export default function Analytics() {
             Income vs expenses trend
           </p>
           <div className="mt-6 h-80">
-            <Bar data={barData} options={getChartOptions(isDark)} />
+            <Bar data={barData} options={getChartOptions(isDark, formatAmount)} />
           </div>
         </GlassCard>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-3">
         {[
-          { label: 'Avg. Daily Spend', value: formatCurrency(avgDailySpend) },
+          { label: 'Avg. Daily Spend', value: formatAmount(avgDailySpend) },
           { label: 'Top Category', value: topCategory },
           { label: 'Savings Rate', value: `${savingsRate.toFixed(0)}%` },
         ].map((stat, index) => (

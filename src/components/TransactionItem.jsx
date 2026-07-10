@@ -1,6 +1,7 @@
 import { FiEdit2, FiTrash2 } from 'react-icons/fi'
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../data/categories.js'
-import { formatCurrency, formatDate } from '../utils/formatters.js'
+import { useCurrency } from '../hooks/useCurrency.js'
+import { formatDate } from '../utils/formatters.js'
 
 function getCategoryLabel(categoryId) {
   const category = [...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES].find(
@@ -17,6 +18,7 @@ function getCategoryColor(categoryId) {
 }
 
 export default function TransactionItem({ transaction, onEdit, onDelete }) {
+  const { formatAmount } = useCurrency()
   const isIncome = transaction.type === 'income'
 
   return (
@@ -41,7 +43,7 @@ export default function TransactionItem({ transaction, onEdit, onDelete }) {
           className={`text-xl font-bold ${isIncome ? 'text-emerald-500' : 'text-rose-500'}`}
         >
           {isIncome ? '+' : '-'}
-          {formatCurrency(transaction.amount)}
+          {formatAmount(transaction.amount)}
         </span>
 
         <div className="flex items-center gap-2 opacity-100 transition-opacity sm:opacity-70 sm:group-hover:opacity-100">

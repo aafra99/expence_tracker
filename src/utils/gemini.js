@@ -52,9 +52,15 @@ export async function generateFinancialInsights(transactions, budgetGoal) {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY
 
   if (!apiKey) {
-    throw new Error(
-      'Missing Gemini API key. Add VITE_GEMINI_API_KEY to your .env.local file.',
-    )
+    return `
+  ## AI Insights Disabled
+  
+  AI Insights are disabled in this demo.
+  
+  The Expense Tracker continues to work normally.
+  
+  To enable AI-powered financial analysis, add a valid Gemini API key to the project's .env.local file.
+  `
   }
 
   const context = buildFinancialContext(transactions, budgetGoal)

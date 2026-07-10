@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { FiBell, FiDollarSign, FiGlobe, FiShield, FiTrash2 } from 'react-icons/fi'
 import GlassCard from '../components/GlassCard.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
+import { useCurrency } from '../hooks/useCurrency.js'
 import { useTheme } from '../hooks/useTheme.js'
 import { useTransactions } from '../hooks/useTransactions.js'
-import { formatCurrency } from '../utils/formatters.js'
+import { SUPPORTED_CURRENCIES } from '../utils/currencies.js'
 
 export default function Settings() {
   const { theme } = useTheme()
+  const { currency, setCurrency, formatAmount } = useCurrency()
   const { budgetGoal, setBudgetGoal, clearAllData, resetDemoData, transactions } =
     useTransactions()
   const [budgetInput, setBudgetInput] = useState(String(budgetGoal))
@@ -66,7 +68,7 @@ export default function Settings() {
             <div>
               <p className="font-semibold text-slate-900 dark:text-white">Budget Goal</p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Monthly limit: {formatCurrency(budgetGoal)}
+                Monthly limit: {formatAmount(budgetGoal)}
               </p>
             </div>
           </div>
@@ -111,14 +113,30 @@ export default function Settings() {
       </GlassCard>
 
       <GlassCard hover>
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 text-violet-600 dark:text-violet-300">
-            <FiGlobe className="h-5 w-5" />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 text-violet-600 dark:text-violet-300">
+              <FiGlobe className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-semibold text-slate-900 dark:text-white">Currency</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Display amounts in your preferred currency
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="font-semibold text-slate-900 dark:text-white">Currency</p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">USD — United States Dollar</p>
-          </div>
+          <select
+            value={currency}
+            onChange={(event) => setCurrency(event.target.value)}
+            className="input-field w-full sm:w-64"
+            aria-label="Select currency"
+          >
+            {SUPPORTED_CURRENCIES.map((item) => (
+              <option key={item.code} value={item.code}>
+                {item.label}
+              </option>
+            ))}
+          </select>
         </div>
       </GlassCard>
 

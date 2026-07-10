@@ -7,12 +7,13 @@ import GlassCard from '../components/GlassCard.jsx'
 import IncomeCard from '../components/IncomeCard.jsx'
 import SearchBar from '../components/SearchBar.jsx'
 import TransactionList from '../components/TransactionList.jsx'
+import { useCurrency } from '../hooks/useCurrency.js'
 import { useTransactions } from '../hooks/useTransactions.js'
 import { filterTransactions, getBalanceTrend } from '../utils/analytics.js'
-import { formatCurrency } from '../utils/formatters.js'
 
 export default function Dashboard() {
   const navigate = useNavigate()
+  const { formatAmount } = useCurrency()
   const {
     transactions,
     budgetGoal,
@@ -52,7 +53,7 @@ export default function Dashboard() {
           }`}
         >
           {budgetUsedPercent >= 100
-            ? `Budget exceeded! You've spent ${formatCurrency(monthlyExpenses)} of your ${formatCurrency(budgetGoal)} limit.`
+            ? `Budget exceeded! You've spent ${formatAmount(monthlyExpenses)} of your ${formatAmount(budgetGoal)} limit.`
             : `Budget alert: ${budgetUsedPercent.toFixed(0)}% of your monthly budget used.`}
         </div>
       )}
@@ -90,7 +91,7 @@ export default function Dashboard() {
           </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Monthly spending limit</p>
           <p className="mt-5 text-4xl font-extrabold text-violet-600 dark:text-violet-300">
-            {formatCurrency(budgetGoal)}
+            {formatAmount(budgetGoal)}
           </p>
           <div className="mt-6 h-3 overflow-hidden rounded-full bg-white/20">
             <div
@@ -108,7 +109,7 @@ export default function Dashboard() {
             <div className="flex justify-between text-sm">
               <span className="text-slate-500 dark:text-slate-400">Remaining</span>
               <span className="font-semibold text-slate-900 dark:text-white">
-                {formatCurrency(Math.max(budgetGoal - monthlyExpenses, 0))}
+                {formatAmount(Math.max(budgetGoal - monthlyExpenses, 0))}
               </span>
             </div>
             <div className="flex justify-between text-sm">
